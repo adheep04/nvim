@@ -1,0 +1,78 @@
+-- ██╗███╗   ██╗██╗████████╗██╗     ██╗   ██╗ █████╗
+-- ██║████╗  ██║██║╚══██╔══╝██║     ██║   ██║██╔══██╗
+-- ██║██╔██╗ ██║██║   ██║   ██║     ██║   ██║███████║
+-- ██║██║╚██╗██║██║   ██║   ██║     ██║   ██║██╔══██║
+-- ██║██║ ╚████║██║   ██║   ███████╗╚██████╔╝██║  ██║
+-- ╚═╝╚═╝  ╚═══╝╚═╝   ╚═╝   ╚══════╝ ╚═════╝ ╚═╝  ╚═╝
+
+-- Set log level early to reduce noise
+vim.lsp.set_log_level('WARN')
+
+-- Leaders - Set these early as they might be needed before plugins load
+vim.g.mapleader = ' '
+vim.g.maplocalleader = ' '
+
+-- BOOTSTRAP PACKAGE MANAGER ---------------------------------------
+-- Bootstrap lazy.nvim package manager (moved up to load earlier)
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
+  local lazyrepo = "https://github.com/folke/lazy.nvim.git"
+  vim.fn.system({
+    "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath
+  })
+end
+vim.opt.rtp:prepend(lazypath)
+
+-- Load core modules
+require("options")
+require("keymaps")
+require("autocmds")
+
+-- LAZY PLUGIN MANAGER SETUP ---------------------------------------
+require("lazy").setup("plugins", {
+  defaults = { 
+    lazy = true,
+  },
+
+  checker = { enabled = false },  -- Disable update checking
+  change_detection = { enabled = false },  -- Disable change detection
+  performance = {
+
+    cache = { enabled = true },
+    reset_packpath = true,
+    rtp = {
+      reset = true,
+      disabled_plugins = {
+        "gzip", "matchit", "netrwPlugin", 
+        "tarPlugin", "tohtml", "tutor", "zipPlugin",
+      },
+    },
+  },
+})
+
+vim.cmd("colorscheme venom")
+
+-- UI HELPERS AND DIAGNOSTICS --------------------------------------
+-- Function to configure UI elements, called once after plugins load
+local function setup_ui_elements()
+   -- Configure LSP handlers
+  local handler_opts = { border = "rounded", width = 60 }
+  vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, handler_opts)
+  vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, handler_opts)
+  
+  -- Customized highlight groups
+  vim.api.nvim_set_hl(0, "LspReferenceText", { bg = "#2d3149", blend = 70 })
+  vim.api.nvim_set_hl(0, "LspReferenceRead", { bg = "#2d3149", blend = 70 })
+  vim.api.nvim_set_hl(0, "LspReferenceWrite", { bg = "#2d3149", blend = 70 })
+  vim.api.nvim_set_hl(0, "DiagnosticError", { fg = "#8b5d65" })
+  vim.api.nvim_set_hl(0, "DiagnosticWarn", { fg = "#8b77a0" })
+  vim.api.nvim_set_hl(0, "DiagnosticHint", { fg = "#6a92d7" })
+  vim.api.nvim_set_hl(0, "DiagnosticInfo", { fg = "#56b6c2" })
+  vim.api.nvim_set_hl(0, "Search", { bg = "#2d3149", fg = "#c0caf5", blend = 30 })
+  vim.api.nvim_set_hl(0, "IncSearch", { bg = "#3e68d7", fg = "#c0caf5", bold = true, blend = 30 })
+  vim.api.nvim_set_hl(0, "DiagnosticUnnecessary", { fg = "#8094b4", italic = true })
+  vim.api.nvim_set_hl(0, "Folded", { fg = "#565f89", bg = "NONE", italic = true })
+  vim.api.nvim_set_hl(0, "FoldColumn", { fg = "#565f89", bg = "NONE" })
+end
+
+setup_ui_elements()
