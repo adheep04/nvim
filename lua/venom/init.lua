@@ -21,10 +21,15 @@ M.interpolate = function(color1, color2, t)
   return {r, g, b}
 end
 
+M.clamp = function(value, min, max)
+  return math.max(min, math.min(max, value))
+end
+
 M.steps = { 0.1, 0.25, 0.5, 0.75, 0.9 }
 
--- M.fg = "#BFB8DC"
-M.fg = "#b8a9c0"
+M.fg = "#BFB8DC"
+-- M.fg = "#b8a9c0"
+-- #b8a9d6
 -- M.bg = "#101019"
 M.bg = "#0e0d0f"
 
@@ -261,6 +266,9 @@ local c = {
   string    = M.shades.green[0],
   keyword   = M.shades.orange[0],
   operator  = M.shades.orange[1],  -- Down from [2]
+  
+  -- Missing fold color
+  fold      = M.shades.grey[-1],
 }
 
 local highlights = {
@@ -404,7 +412,7 @@ local highlights = {
   ['NormalFloat']     = { 'Normal' },
   ['NormalNC']        = { 'Normal' },
 
-  ['Search']          = { bg = c.fold },
+  ['Search']          = { bg = c.mg, fg = c.fg, blend = 30 },
   ['IncSearch']       = { 'Search' },
   ['CurSearch']       = { 'Search' },
   ['Substitute']      = { 'Search' },

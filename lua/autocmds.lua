@@ -39,5 +39,41 @@ vim.defer_fn(function()
   vim.opt.lazyredraw = false
 end, 300)
 
+-- Auto save on certain events
+vim.api.nvim_create_autocmd({ "InsertLeave", "TextChanged" }, {
+  pattern = "*",
+  callback = function()
+    local buf = vim.api.nvim_get_current_buf()
+    
+    -- Skip oil buffers and special buffers
+    if vim.bo[buf].buftype ~= "" or vim.bo[buf].filetype == "oil" then
+      return
+    end
+    
+    -- Check if buffer is valid for saving
+    local valid = vim.api.nvim_buf_is_valid(buf) 
+      and vim.bo[buf].buflisted
+      and vim.bo[buf].modified 
+      and not vim.bo[buf].readonly 
+      and vim.fn.expand("%") ~= ""
+      and vim.bo[buf].modifiable
+    
+    if valid then
+      vim.cmd("silent! write")
+    end
+  end,
+  nested = true,
+})
+
+-- Also save on focus lost
+vim.api.nvim_create_autocmd({ "FocusLost", "BufLeave" }, {
+  pattern = "*",
+  callback = function()
+    -- Only save normal buffers (not oil or special buffers)
+    if vim.bo.buftype == "" and vim.bo.filetype ~= "oil" then
+      vim.cmd("silent! wall")
+    end
+  end,
+})
 
 

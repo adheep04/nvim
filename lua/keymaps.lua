@@ -6,12 +6,19 @@ local n = utils.n
 -- Disable space in visual mode
 map('v', '<Space>', '<Nop>')
 
+
+-- end of word
+vim.keymap.set({ "n", "v", "o" }, "E", "e", { desc = "End of word" })
 -- Colemak navigation
 map({ "n", "v", "o" }, "j", "h") 
 map({ "n", "v", "o" }, "k", "j") 
 map({ "n", "v", "o" }, "l", "k") 
 map({ "n", "v", "o" }, ";", "l") 
 map({ "n", "v", "o" }, "f", "/", { silent = false })
+
+map({ "n", "v", "o" }, "q", "b") 
+-- tab to cycle through windows
+vim.keymap.set("n", "<Tab>", "<C-w>w", { desc = "Next window" })
 
 -- Line manipulation
 n('K', ':m .+1<CR>', { desc = 'move line down' })
@@ -58,7 +65,7 @@ n('cf', 'zaV"+yza', { desc = 'Copy fold content and close fold' })
 map('n', '<leader>w', 'viw', { desc = 'Select inner word (Visual mode)' })
 n('<C-z>', "u", { desc = 'undo' })
 n('<leader>;', "i", { desc = 'insert mode' })
-n('<C-S-d>', ':Twilight<CR>', { desc = 'Toggle Twilight' })
+n('<M-D>', ':Twilight<CR>', { desc = 'Toggle Twilight' })
 n('<C-c>', ':ColorizerToggle<CR>', { desc = 'Toggle Colorizer' })
 
 n('zl', 'zk', { desc = 'next fold' })
@@ -67,6 +74,10 @@ n('<leader>z', 'zMzvzz', { desc = 'focus current fold (close others)' })
 n('<leader>F', function() pcall(vim.cmd, 'normal! zO') end, { desc = 'recursively open fold at cursor' })
 n('<leader>f', function() pcall(vim.cmd, 'normal! za') end, { desc = 'toggle fold at cursor (smart, skip comments)' })
 
+vim.keymap.set("n", "<leader>s", function()
+  vim.cmd('echo "SUBSTITUTE: "')
+  vim.fn.feedkeys(":%s/", "n")
+end, { desc = "Search and replace" })
 
 -- Custom <Esc> behavior for command-line search
 vim.keymap.set('c', '<Esc>', function()

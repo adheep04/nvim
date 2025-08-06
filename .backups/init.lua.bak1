@@ -11,7 +11,7 @@ vim.lsp.set_log_level('WARN')
 -- Leaders - Set these early as they might be needed before plugins load
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
-vim.opt.mouse = ""
+
 -- BOOTSTRAP PACKAGE MANAGER ---------------------------------------
 -- Bootstrap lazy.nvim package manager (moved up to load earlier)
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -50,6 +50,8 @@ require("lazy").setup("plugins", {
   },
 })
 
+vim.cmd("colorscheme venom")
+
 -- UI HELPERS AND DIAGNOSTICS --------------------------------------
 -- Function to configure UI elements, called once after plugins load
 local function setup_ui_elements()
@@ -58,31 +60,25 @@ local function setup_ui_elements()
   vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, handler_opts)
   vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, handler_opts)
   
-  -- Customized highlight groups (lighter colors)
-  vim.api.nvim_set_hl(0, "LspReferenceText", { bg = "#3a4058", blend = 50 })
-  vim.api.nvim_set_hl(0, "LspReferenceRead", { bg = "#3a4058", blend = 50 })
-  vim.api.nvim_set_hl(0, "LspReferenceWrite", { bg = "#3a4058", blend = 50 })
-  vim.api.nvim_set_hl(0, "DiagnosticError", { fg = "#b47a7a" })
-  vim.api.nvim_set_hl(0, "DiagnosticWarn", { fg = "#a896c2" })
-  vim.api.nvim_set_hl(0, "DiagnosticHint", { fg = "#8ab4f0" })
-  vim.api.nvim_set_hl(0, "DiagnosticInfo", { fg = "#7ac8d4" })
-  vim.api.nvim_set_hl(0, "Search", { bg = "#3a4058", fg = "#d0d8ff", blend = 20 })
-  vim.api.nvim_set_hl(0, "IncSearch", { bg = "#5a7ae0", fg = "#d0d8ff", bold = true, blend = 20 })
-  vim.api.nvim_set_hl(0, "DiagnosticUnnecessary", { fg = "#9aaccc", italic = true })
-  vim.api.nvim_set_hl(0, "Folded", { fg = "#7a8bb0", bg = "NONE", italic = true })
-  vim.api.nvim_set_hl(0, "FoldColumn", { fg = "#7a8bb0", bg = "NONE" })
+  -- Customized highlight groups
+  vim.api.nvim_set_hl(0, "LspReferenceText", { bg = "#2d3149", blend = 70 })
+  vim.api.nvim_set_hl(0, "LspReferenceRead", { bg = "#2d3149", blend = 70 })
+  vim.api.nvim_set_hl(0, "LspReferenceWrite", { bg = "#2d3149", blend = 70 })
+  vim.api.nvim_set_hl(0, "DiagnosticError", { fg = "#8b5d65" })
+  vim.api.nvim_set_hl(0, "DiagnosticWarn", { fg = "#8b77a0" })
+  vim.api.nvim_set_hl(0, "DiagnosticHint", { fg = "#6a92d7" })
+  vim.api.nvim_set_hl(0, "DiagnosticInfo", { fg = "#56b6c2" })
+  vim.api.nvim_set_hl(0, "Search", { bg = "#2d3149", fg = "#c0caf5", blend = 30 })
+  vim.api.nvim_set_hl(0, "IncSearch", { bg = "#3e68d7", fg = "#c0caf5", bold = true, blend = 30 })
+  vim.api.nvim_set_hl(0, "DiagnosticUnnecessary", { fg = "#8094b4", italic = true })
+  vim.api.nvim_set_hl(0, "Folded", { fg = "#565f89", bg = "NONE", italic = true })
+  vim.api.nvim_set_hl(0, "FoldColumn", { fg = "#565f89", bg = "NONE" })
 
   -- Enable transparency
   vim.api.nvim_set_hl(0, "Normal", { bg = "NONE" })
   vim.api.nvim_set_hl(0, "NormalFloat", { bg = "NONE" })
-  vim.api.nvim_set_hl(0, "FloatBorder", { bg = "NONE", fg = "#8094b4" })
+  vim.api.nvim_set_hl(0, "FloatBorder", { bg = "NONE", fg = "#565f89" })
+  vim.api.nvim_set_hl(0, "OilFloatBorder", { bg = "NONE", fg = "#8094b4" })
 end
-
-vim.cmd("colorscheme venom")
-
--- Apply highlights after colorscheme loads
-vim.api.nvim_create_autocmd("ColorScheme", {
-  callback = setup_ui_elements,
-})
 
 setup_ui_elements()
