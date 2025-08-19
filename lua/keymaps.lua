@@ -17,8 +17,7 @@ map({ "n", "v", "o" }, ";", "l")
 map({ "n", "v", "o" }, "f", "/", { silent = false })
 
 map({ "n", "v", "o" }, "q", "b") 
--- tab to cycle through windows
-vim.keymap.set("n", "<Tab>", "<C-w>w", { desc = "Next window" })
+
 
 -- Line manipulation
 n('K', ':m .+1<CR>', { desc = 'move line down' })
@@ -120,4 +119,3 @@ n('<Esc>', function()
   end, 20)
 end, { desc = 'clear highlights and close floats' })
 
-vim.keymap.set('n', '<C-i>', '<C-i>', { noremap = true })
