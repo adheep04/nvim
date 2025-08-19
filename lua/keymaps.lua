@@ -119,3 +119,5 @@ n('<Esc>', function()
     end
   end, 20)
 end, { desc = 'clear highlights and close floats' })
+
+vim.keymap.set('n', '<C-i>', '<C-i>', { noremap = true })

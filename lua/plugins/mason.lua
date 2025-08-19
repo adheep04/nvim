@@ -1,7 +1,6 @@
 return {
   "williamboman/mason.nvim",
   cmd = { "Mason", "MasonUpdate" },
-  event = { "BufReadPre", "BufNewFile" },
   build = ":MasonUpdate",
   config = function()
     require("mason").setup({
@@ -14,5 +13,6 @@ return {
         }
       }
     })
+    vim.api.nvim_exec_autocmds("User", { pattern = "MasonDone" })
   end
 }
